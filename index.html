@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AF STYLE 13 | Men's Fashion</title>
+<style>
+:root{--ink:#111;--muted:#666;--line:#e8e8e8;--paper:#fafafa}
+*{box-sizing:border-box}body{margin:0;font-family:Arial,Helvetica,sans-serif;color:var(--ink);background:white}
+header{background:#111;color:white;padding:18px 5%;display:flex;justify-content:space-between;align-items:center;gap:12px}
+.logo{font-size:22px;font-weight:800;letter-spacing:1px}.logo small{display:block;font-size:10px;letter-spacing:3px;margin-top:4px;color:#bbb}
+.cart{border:1px solid #666;padding:9px 13px;border-radius:22px;font-size:14px}
+.hero{padding:52px 6%;background:linear-gradient(120deg,#171717,#444);color:white}
+.hero p{color:#ddd;max-width:480px;line-height:1.5}.hero h1{font-size:clamp(34px,7vw,58px);margin:0 0 12px;line-height:1.02}
+.tag{font-size:11px;letter-spacing:3px;color:#bbb}.wrap{padding:30px 5%;max-width:1100px;margin:auto}
+.tools{display:flex;gap:10px;flex-wrap:wrap;margin:15px 0 24px}
+input,select,button{font:inherit}input,select{padding:12px;border:1px solid #ddd;border-radius:8px;background:white}
+#search{flex:1;min-width:180px}.filters button{padding:9px 13px;border:1px solid #ddd;background:white;border-radius:20px;margin:0 5px 7px 0;cursor:pointer}
+.filters button.active{background:#111;color:white;border-color:#111}
+.products{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:16px}
+.product{border:1px solid var(--line);border-radius:12px;overflow:hidden;background:white}
+.photo{height:170px;background:#eee;display:flex;align-items:center;justify-content:center;font-size:48px}
+.details{padding:13px}.details h3{font-size:15px;margin:0 0 7px}.price{font-weight:bold;margin-bottom:12px}
+.add{width:100%;border:0;border-radius:7px;background:#111;color:white;padding:11px;cursor:pointer}
+.section-title{font-size:23px;margin:0}.sub{color:var(--muted);font-size:13px}
+.panel{margin-top:28px;padding:18px;border:1px solid var(--line);border-radius:12px;background:var(--paper)}
+.row{display:flex;justify-content:space-between;gap:12px;align-items:center;padding:8px 0;border-bottom:1px solid var(--line)}
+.primary{background:#111;color:white;border:0;padding:12px 16px;border-radius:8px;cursor:pointer}
+footer{padding:25px 5%;background:#111;color:#bbb;font-size:12px;text-align:center;margin-top:40px}
+@media(min-width:700px){.photo{height:220px}}
+</style>
+</head>
+<body>
+<header><div class="logo">AF STYLE 13<small>MEN'S FASHION STORE</small></div><div class="cart">🛒 Cart: <b id="count">0</b></div></header>
+<section class="hero"><div class="tag">RANGAPANI · ASSAM</div><h1>STYLE THAT<br> SPEAKS.</h1><p>Discover everyday men's fashion. Browse the collection and add your favourites to the cart.</p></section>
+<main class="wrap">
+<h2 class="section-title">Shop the collection</h2><p class="sub">Sample products and prices — replace these with the shop's actual catalogue.</p>
+<div class="tools"><input id="search" placeholder="Search shirts, jeans..." oninput="render()"></div>
+<div class="filters"><button class="active" onclick="setCategory('All',this)">All</button><button onclick="setCategory('Shirts',this)">Shirts</button><button onclick="setCategory('T-Shirts',this)">T-Shirts</button><button onclick="setCategory('Jeans',this)">Jeans</button></div>
+<div class="products" id="products"></div>
+<section class="panel"><h2 class="section-title">Your cart</h2><div id="cartItems" class="sub">Your cart is empty.</div><div class="row"><b>Total</b><b id="total">₹0</b></div><p class="sub">Demo only: checkout and payments are not connected yet.</p><button class="primary" onclick="alert('This is a demo storefront. Real orders will be enabled after secure setup.')">Continue</button></section>
+</main>
+<footer>AF STYLE 13 · Rangapani, Kamrup Rural, Assam<br>Demo storefront — sample catalogue only</footer>
+<script>
+const items=[
+{id:1,name:'Classic Black Shirt',category:'Shirts',price:799,emoji:'👔'},
+{id:2,name:'White Casual T-Shirt',category:'T-Shirts',price:499,emoji:'👕'},
+{id:3,name:'Blue Denim Jeans',category:'Jeans',price:999,emoji:'👖'},
+{id:4,name:'Premium Polo T-Shirt',category:'T-Shirts',price:699,emoji:'👕'},
+{id:5,name:'Casual Checked Shirt',category:'Shirts',price:899,emoji:'👔'},
+{id:6,name:'Everyday Denim',category:'Jeans',price:1099,emoji:'👖'}];
+let category='All',cart={};
+function setCategory(c,el){category=c;document.querySelectorAll('.filters button').forEach(b=>b.classList.remove('active'));el.classList.add('active');render()}
+function add(id){cart[id]=(cart[id]||0)+1;renderCart()}
+function render(){let q=document.getElementById('search').value.toLowerCase();let list=items.filter(p=>(category==='All'||p.category===category)&&p.name.toLowerCase().includes(q));document.getElementById('products').innerHTML=list.map(p=>`<article class="product"><div class="photo">${p.emoji}</div><div class="details"><h3>${p.name}</h3><div class="price">₹${p.price}</div><button class="add" onclick="add(${p.id})">Add to cart</button></div></article>`).join('')||'<p>No products found.</p>'}
+function renderCart(){let chosen=items.filter(p=>cart[p.id]);let count=Object.values(cart).reduce((a,b)=>a+b,0);let total=chosen.reduce((s,p)=>s+p.price*cart[p.id],0);document.getElementById('count').textContent=count;document.getElementById('total').textContent='₹'+total;document.getElementById('cartItems').innerHTML=chosen.length?chosen.map(p=>`<div class="row"><span>${p.name} × ${cart[p.id]}</span><span>₹${p.price*cart[p.id]} <button onclick="cart[${p.id}]--;if(!cart[${p.id}])delete cart[${p.id}];renderCart()" aria-label="Remove one">−</button> <button onclick="add(${p.id})" aria-label="Add one">+</button></span></div>`).join(''):'Your cart is empty.'}
+render();renderCart();
+</script>
+</body>
+</html>
